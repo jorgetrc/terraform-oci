@@ -11,6 +11,7 @@ resource "oci_core_subnet" "subnet_terra" {
     compartment_id = var.compartment_ocid
     vcn_id = oci_core_vcn.vcn_terra.id
     display_name = "subnet_terra"
+    security_list_ids = [oci_core_security_list.security_list_terra.id]
 }
 
 resource "oci_core_internet_gateway" "terra_internet_gateway" {
