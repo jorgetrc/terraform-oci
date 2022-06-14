@@ -22,8 +22,8 @@ resource "oci_core_security_list" "security_list_terra" {
                 protocol = "6"
                 source = "0.0.0.0/0"
                 tcp_options {
-                        min = "8080"
-                        max = "8080"
+                        min = "80"
+                        max = "80"
 		}
 
 }	
