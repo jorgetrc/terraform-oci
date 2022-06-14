@@ -6,7 +6,7 @@ resource "oci_core_instance" "instance_server" {
 	display_name = "server ${count.index +1}"
 
 	source_details {
-	  source_id = "ocid1.image.oc1.sa-saopaulo-1.aaaaaaaaazgdqu6qyebkor2yhmzpk6kirqoxrpavmefklvuvmng3wj3f6v3a" 
+	  source_id = "ocid1.image.oc1.sa-saopaulo-1.aaaaaaaayatkweelfzdxyceqxuqomh4fz72dnnzqwan46gyrsooytfwym47q"
 	  source_type = "image"
 	}
 
