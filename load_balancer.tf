@@ -15,19 +15,17 @@ resource "oci_load_balancer_load_balancer" "load_balancer" {
 resource "oci_load_balancer_backend_set" "backend_set_terra" {
     #Required
     health_checker {
-        #Required
         protocol = "HTTP"
-
-        #Optional
         interval_ms = 10000
         port = 80
         return_code = 200
         timeout_in_millis = 3000
         url_path = "/"
+        retries             = "3"
     }
     load_balancer_id = oci_load_balancer_load_balancer.load_balancer.id
     name = "backend_set_terra"
-    policy = "LEAST_CONNECTIONS"
+    policy = "ROUND_ROBIN"
 
 	/*
     #Optional
@@ -65,4 +63,42 @@ resource "oci_load_balancer_backend_set" "backend_set_terra" {
         verify_peer_certificate = var.backend_set_ssl_configuration_verify_peer_certificate
     }
     */
+}
+
+resource "oci_load_balancer_listener" "lb-listener" {
+  load_balancer_id         = oci_load_balancer_load_balancer.load_balancer.id
+  name                     = "http"
+  default_backend_set_name = oci_load_balancer_backend_set.backend_set_terra.name
+  #hostname_names           = [oci_load_balancer_hostname.test_hostname1.name, oci_load_balancer_hostname.test_hostname2.name]
+  port                     = 80
+  protocol                 = "HTTP"
+  #rule_set_names           = [oci_load_balancer_rule_set.test_rule_set.name]
+
+  connection_configuration {
+    idle_timeout_in_seconds = "60"
+  }
+}
+
+resource "oci_load_balancer_backend" "lbb_server1" {
+  depends_on = [oci_core_instance.instance_server[0]]
+  backendset_name  = oci_load_balancer_backend_set.backend_set_terra.id
+  backup           = false
+  drain            = false
+  load_balancer_id = oci_load_balancer_load_balancer.load_balancer.id
+  ip_address       = oci_core_instance.instance_server[0].private_ip
+  offline          = false
+  port             = 80
+  weight           = 1
+}
+
+resource "oci_load_balancer_backend" "lbb_server2" {
+  depends_on = [oci_core_instance.instance_server[1]]
+  backendset_name  = oci_load_balancer_backend_set.backend_set_terra.id
+  backup           = false
+  drain            = false
+  load_balancer_id = oci_load_balancer_load_balancer.load_balancer.id
+  ip_address       = oci_core_instance.instance_server[1].private_ip
+  offline          = false
+  port             = 80
+  weight           = 1
 }
