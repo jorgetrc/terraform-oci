@@ -1,3 +1,6 @@
+data "template_file" "user_data" {
+  template = file("cloud-init.yaml")
+}
 resource "oci_core_instance" "instance_server" {
 	count = 2
 	availability_domain = "JNid:SA-SAOPAULO-1-AD-1"
@@ -15,5 +18,6 @@ resource "oci_core_instance" "instance_server" {
 	}
 	metadata = {
 		ssh_authorized_keys = var.ssh_authorized_keys
+		user_data = base64encode(data.template_file.user_data.rendered)
 	}
 }
