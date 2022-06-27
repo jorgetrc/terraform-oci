@@ -1,0 +1,11 @@
+#cloud-config
+packages:
+  - nginx
+
+runcmd:
+  - [firewall-offline-cmd, --add-service=https]
+  - [firewall-offline-cmd, --add-service=http]
+  - [systemctl, enable, nginx]
+  - [systemctl, start, nginx]
+  - [systemctl, restart, firewalld]
+  - [sh, -c, echo "<html>Web server":" $(hostname)</html>" > /usr/share/nginx/html/index.html]
