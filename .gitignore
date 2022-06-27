@@ -33,6 +33,7 @@ override.tf.json
 .terraformrc
 terraform.rc
 .terraform.lock.hcl
+variables.tf
 
 # Variaveis de conexão cloud OCI
 vars.tf
