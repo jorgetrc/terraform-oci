@@ -13,6 +13,7 @@ resource "oci_core_instance" "instance_server" {
     source_type = "image"
   }
 
+
   create_vnic_details {
     subnet_id = oci_core_subnet.subnet_terra.id
   }
